@@ -8,6 +8,7 @@ ENSURE THAT THE FOLLOWING CONDITIONS ARE TRUE:
 * There are at least 8 borrowers in the BORROWER table, and at least 2 of those borrowers have more than 5 books loaned to them. 
 * There are at least 4 branches in the LIBRARY_BRANCH table. 
 * There are at least 50 loans in the BOOK_LOANS table.
+* There must be at least two books written by 'Stephen King' located at the 'Central' branch.
 -------------------------------------------------------*/
 
 
@@ -365,5 +366,16 @@ SELECT COUNT(DISTINCT LB.BranchName) AS 'Total # of Branches' FROM Library_Branc
 
 -- * There are at least 50 loans in the BOOK_LOANS table.
 SELECT COUNT(*) AS 'Total # of Loans' FROM Book_Loans AS BL;  --> There are 50 total loans
+
+
+-- * There must be at least two books written by 'Stephen King' located at the 'Central' branch.
+SELECT BA.AuthorName, B.Title, LB.BranchName, BC.Number_Of_Copies FROM Book_Authors AS BA
+	INNER JOIN Books AS B ON BA.BookID = B.BookID
+	INNER JOIN Book_Copies AS BC ON BC.BookID = B.BookID
+	INNER JOIN Library_Branch AS LB ON LB.BranchID = BC.BranchID
+	WHERE BA.AuthorName = 'Stephen King' AND LB.BranchName = 'Central';
+
+
+
 
 
