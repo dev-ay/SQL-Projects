@@ -285,10 +285,21 @@ SELECT B.Title, L.BranchName, C.Number_Of_Copies FROM Book_Copies AS C
 
 
 -- 3.) Retrieve the names of all borrowers who do not have any books checked out. 
+
+   -- (Method 1)
 SELECT P.Name, COUNT(BL.CardNo) AS '# Books Borrowed' FROM Borrower AS P
 	LEFT JOIN Book_Loans AS BL ON P.CardNo = BL.CardNo -- requires left join because some borrowers from first Borrower table will not exist in the second Book_Loans table
 	GROUP BY P.Name, BL.CardNo
 	HAVING COUNT(BL.CardNo) = 0;
+
+   -- (Method 2)
+SELECT P.Name, 0 AS '# Books Borrowed' FROM Borrower AS P
+	LEFT JOIN Book_Loans AS BL ON P.CardNo = BL.CardNo -- requires left join because some borrowers from first Borrower table will not exist in the second Book_Loans table
+	WHERE BL.CardNo IS NULL
+
+   -- (Method 2)
+SELECT P.Name, 0 AS '# Books Borrowed' FROM Borrower AS P
+	WHERE P.CardNo NOT IN (SELECT CardNo FROM BOOK_LOANS)
 
 
 -- 4.) For each book that is loaned out from the "Sharpstown" branch and whose DueDate is today, retrieve the book title, the borrower's name, and the borrower's address. 
